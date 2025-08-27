@@ -149,8 +149,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b85c0866fe32b4155a3abeb84afde030, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  redObj: {fileID: 1939305403166439683, guid: 2b07b68de1c9a40b181b461db5cd8649, type: 3}
-  blueObj: {fileID: 5480373371593286394, guid: b6e450527580c4e1da6a53a5e2f57ddd, type: 3}
+  redObj: {fileID: 6354641115497830296, guid: 2b07b68de1c9a40b181b461db5cd8649, type: 3}
+  blueObj: {fileID: 7345378894543055378, guid: b6e450527580c4e1da6a53a5e2f57ddd, type: 3}
 --- !u!4 &280456364
 Transform:
   m_ObjectHideFlags: 0

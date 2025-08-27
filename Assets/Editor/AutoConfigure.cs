@@ -9,6 +9,25 @@ using System.IO;
 // for Lab Week 4 when the project reloads in the Unity Editor.
 public static class AutoConfigure
 {
+    [MenuItem("Tools/Lab4/Run Auto Configure")]
+    private static void RunAutoConfigureMenu()
+    {
+        try
+        {
+            EnsureFolder("Assets/Prefabs");
+            EnsureFolder("Assets/Materials");
+
+            var redMat = EnsureMaterial("Assets/Materials/RedMat.mat", Color.red);
+            var blueMat = EnsureMaterial("Assets/Materials/BlueMat.mat", Color.blue);
+            EnsurePrefab("Assets/Prefabs/RedPrefab.prefab", "Red", redMat);
+            EnsurePrefab("Assets/Prefabs/BluePrefab.prefab", "Blue", blueMat);
+
+            WireScene();
+            AssetDatabase.SaveAssets();
+            EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+        }
+        catch { }
+    }
     [InitializeOnLoadMethod]
     private static void ConfigureOnLoad()
     {
@@ -37,23 +56,22 @@ public static class AutoConfigure
                 material: blueMat
             );
 
-            // If we have an open scene, wire up scene objects
-            if (SceneManager.GetActiveScene().isLoaded)
-            {
-                WireScene();
-            }
+            // Scene wiring is no longer done automatically on load to avoid save prompts.
+            // Use the menu Tools/Lab4/Run Auto Configure if you want to wire the scene manually.
 
 
-	            // Also wire whenever a scene is opened
-	            UnityEditor.SceneManagement.EditorSceneManager.sceneOpened += (scene, mode) => {
-	                try {
-	                    WireScene();
-	                    AssetDatabase.SaveAssets();
-	                } catch {}
+	            // Auto-wire only when entering Play Mode (no save prompt)
+	            EditorApplication.playModeStateChanged += (PlayModeStateChange state) => {
+	                if (state == PlayModeStateChange.EnteringPlayMode)
+	                {
+	                    try { WireSceneForPlayMode(); } catch {}
+	                }
 	            };
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-            try { UnityEditor.SceneManagement.EditorSceneManager.SaveOpenScenes(); } catch {}
+
+
+            // Avoid forcing asset/scene saves on load
+            // AssetDatabase.SaveAssets();
+            // AssetDatabase.Refresh();
         }
         catch
         {
@@ -101,8 +119,8 @@ public static class AutoConfigure
         var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
         if (prefab != null) return false;
 
-        // Create a temp primitive with MeshRenderer
-        GameObject temp = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        // Create a temp primitive with MeshRenderer (use Sphere to match assignment expectation)
+        GameObject temp = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         temp.name = Path.GetFileNameWithoutExtension(prefabPath);
 
         // Assign tag (assumes Tag exists in TagManager)
@@ -176,7 +194,6 @@ public static class AutoConfigure
         var peSO = new SerializedObject(pe);
         var snProp = peSO.FindProperty("studentNumber");
         var brProp = peSO.FindProperty("bandReached");
-
 
         uint sn = GetStudentNumberFromSubmission();
         if (snProp != null && sn > 0) snProp.uintValue = sn;
