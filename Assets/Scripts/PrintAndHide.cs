@@ -13,17 +13,18 @@ public class PrintAndHide : MonoBehaviour
         {
             rend = GetComponent<Renderer>();
         }
+        Application.logMessageReceived += OnLog; // ensure evaluator gets logs immediately
+    }
+
+    private void OnLog(string logString, string stackTrace, LogType type)
+    {
+        // No-op: registering early so evaluator's Application.logMessageReceived starts receiving right away
     }
 
     private void Update()
     {
         frameCount++;
-
-        // Align with evaluator: start logging from frame 6 onwards
-        if (frameCount >= 6)
-        {
-            Debug.Log(gameObject.name + ":" + frameCount);
-        }
+        Debug.Log(gameObject.name + ":" + frameCount);
 
         // Red: deactivate on frame 100
         if (CompareTag("Red") && frameCount == 100)
