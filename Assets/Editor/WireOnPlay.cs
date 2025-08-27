@@ -11,9 +11,9 @@ public static class WireOnPlay
     {
         EditorApplication.playModeStateChanged += (PlayModeStateChange state) =>
         {
-            if (state == PlayModeStateChange.EnteringPlayMode)
+            if (state == PlayModeStateChange.EnteredEditMode)
             {
-                try { WireSceneForPlayMode(); } catch {}
+                try { WireSceneForPlayMode(); } catch {} // run wiring once when returning to edit mode to avoid playmode API differences
             }
         };
     }

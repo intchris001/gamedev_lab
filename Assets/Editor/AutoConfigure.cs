@@ -60,13 +60,7 @@ public static class AutoConfigure
             // Use the menu Tools/Lab4/Run Auto Configure if you want to wire the scene manually.
 
 
-	            // Auto-wire only when entering Play Mode (no save prompt)
-	            EditorApplication.playModeStateChanged += (PlayModeStateChange state) => {
-	                if (state == PlayModeStateChange.EnteringPlayMode)
-	                {
-	                    try { WireSceneForPlayMode(); } catch {}
-	                }
-	            };
+
 
 
             // Avoid forcing asset/scene saves on load
