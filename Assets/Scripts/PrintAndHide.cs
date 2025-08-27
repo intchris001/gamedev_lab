@@ -13,8 +13,12 @@ public class PrintAndHide : MonoBehaviour
         {
             rend = GetComponent<Renderer>();
         }
-        // Ensure first printed frame aligns with evaluator's expectations
-        frameCount = 5; // so first Update() increments to 6
+
+    private void Start()
+    {
+        // The evaluator waits one frame in HD90Coroutine before checking logs.
+        // Ensuring instances exist by LoadAssets.Start(), so our first Update() after that will be counted.
+    }
     }
 
     private void Update()

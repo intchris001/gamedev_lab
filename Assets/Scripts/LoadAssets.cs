@@ -9,7 +9,7 @@ public class LoadAssets : MonoBehaviour
     private GameObject redInstance;
     private GameObject blueInstance;
 
-    private void Awake()
+    private void Start()
     {
         if (redObj != null)
         {
