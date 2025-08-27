@@ -36,12 +36,7 @@ public static class AutoConfigure
             EnsureFolder("Assets/Prefabs");
             EnsureFolder("Assets/Materials");
 
-            // Force delete and recreate materials/prefabs each editor load
-            ForceDeleteAsset("Assets/Materials/RedMat.mat");
-            ForceDeleteAsset("Assets/Materials/BlueMat.mat");
-            ForceDeleteAsset("Assets/Prefabs/RedPrefab.prefab");
-            ForceDeleteAsset("Assets/Prefabs/BluePrefab.prefab");
-
+            // Create/update required assets on load (no forced deletion)
             var redMat = EnsureMaterial("Assets/Materials/RedMat.mat", Color.red);
             var blueMat = EnsureMaterial("Assets/Materials/BlueMat.mat", Color.blue);
 
@@ -56,16 +51,11 @@ public static class AutoConfigure
                 material: blueMat
             );
 
-            // Scene wiring is no longer done automatically on load to avoid save prompts.
-            // Use the menu Tools/Lab4/Run Auto Configure if you want to wire the scene manually.
+            // Do not auto-wire scene on load; use menu if needed.
 
-
-
-
-
-            // Avoid forcing asset/scene saves on load
-            // AssetDatabase.SaveAssets();
-            // AssetDatabase.Refresh();
+            // Save created/updated assets
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
         }
         catch
         {
