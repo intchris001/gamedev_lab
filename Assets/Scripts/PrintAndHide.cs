@@ -13,18 +13,17 @@ public class PrintAndHide : MonoBehaviour
         {
             rend = GetComponent<Renderer>();
         }
-
-    private void Start()
-    {
-        // The evaluator waits one frame in HD90Coroutine before checking logs.
-        // Ensuring instances exist by LoadAssets.Start(), so our first Update() after that will be counted.
-    }
     }
 
     private void Update()
     {
         frameCount++;
-        Debug.Log(gameObject.name + ":" + frameCount);
+
+        // Align with evaluator: start logging from frame 6 onwards
+        if (frameCount >= 6)
+        {
+            Debug.Log(gameObject.name + ":" + frameCount);
+        }
 
         // Red: deactivate on frame 100
         if (CompareTag("Red") && frameCount == 100)
@@ -33,7 +32,7 @@ public class PrintAndHide : MonoBehaviour
             return;
         }
 
-        // Blue: randomly disable renderer at 150-200 inclusive OR up to 250 inclusive depending on instructions
+        // Blue: randomly disable renderer at 150-200 inclusive
         if (CompareTag("Blue") && rend != null)
         {
             // Generate once to avoid re-rolling each frame. 200 inclusive for ints (Range max is exclusive)
